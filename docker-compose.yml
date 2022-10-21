@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 100500
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+  php:
+    container_name: php_larave
+    restart: always
+    build:
+        context: ./php
+        dockerfile: Dockerfile
+    depends_on:
+      - db
+    command: bash -c "cd /var/www/html/quickstart-basic/ && php artisan migrate && php artisan serve --host=0.0.0.0"
+    ports:
+      - "8080:8000"
